@@ -29,20 +29,17 @@ let boardSize=4;
 initGame()
 
 function initGame() {
+
     let seconds = 0;
 
-/*     const timer = document.querySelector('.timer');
-    setInterval(function () {
-        seconds++;
-
-        timer.innerText = seconds;
-    }, 1000);  */
 
     gBoard = buildBoard();
 
     setMinesNegsCount(gBoard)
 
     renderBoard(gBoard);
+
+
 }
 
 function setSize(size) {
@@ -59,6 +56,68 @@ function setMins(mins) {
     minesCount=mins
     initGame()
 }
+
+
+
+
+let hour = 0;
+let minute = 0;
+let second = 0;
+let millisecond = 0;
+let input;
+let cron;
+
+
+
+
+
+function start() {
+    pause();
+    cron = setInterval(() => { timer(); }, 10);
+  }
+  
+  function pause() {
+    clearInterval(cron);
+  }
+  
+  function reset() {
+
+    hour = 0;
+    minute = 0;
+    second = 0;
+    millisecond = 0;
+    document.getElementById('hour').innerText = '00';
+    document.getElementById('minute').innerText = '00';
+    document.getElementById('second').innerText = '00';
+    document.getElementById('millisecond').innerText = '000';
+  }
+
+
+  function timer() {
+
+    if ((millisecond += 10) == 1000) {
+      millisecond = 0;
+      second++;
+    }
+    if (second == 60) {
+      second = 0;
+      minute++;
+    }
+    if (minute == 60) {
+      minute = 0;
+      hour++;
+    }
+    document.getElementById('hour').innerText = returnData(hour);
+    document.getElementById('minute').innerText = returnData(minute);
+    document.getElementById('second').innerText = returnData(second);
+    document.getElementById('millisecond').innerText = returnData(millisecond);
+  }
+  
+  function returnData(input) {
+    return input > 10 ? input : `0${input}`
+  }
+
+
 
 
 
@@ -138,30 +197,32 @@ function getClassName(location) {
 }
 
 
-function cellClicked(elCell, i, j) {
+/* function cellClicked(elCell, i, j) {
+
+    
 
     var cell = gBoard[i][j]
-
+    
     if (cell.isShown) return
     
     if (cell.mines) gameOver()
+
     var neighbors = countAllNeighbors(elCell, i, j)
+
     if (gBoard[i][j].isMine) {
+
         cell.innerText = MINE;
+
     } else {
+
         cell.innerText = neighbors;
     }
 
-}
+} */
 
 
 
-/* function stopTimer() {
-    clearInterval(gTimerInterval);
-    gStartGameTime = null;
-}
 
- */
 
 function setMinesNegsCount(board) {
 
@@ -201,11 +262,14 @@ function countAllNeighbors(board, i, j) {
 
 function cellClicked(elCell, i, j) {
 
+start();
+    
     var currCell = gBoard[i][j];
 
+    
     if (currCell.isShown)
         return;
-
+        
     if (currCell.isMine) {
 
         elCell.innerText = mines;
@@ -214,7 +278,7 @@ function cellClicked(elCell, i, j) {
 
         return;
     }
-
+    
     elCell.innerText = currCell.minesAroundCount
     gBoard[i][j].isShown = true;
     // if (currCell.minesAroundCount) {
@@ -223,18 +287,22 @@ function cellClicked(elCell, i, j) {
 
     checkGameOver()
    
-
+    
 }
 
 
 
 function gameOver() {
 
+    pause();
+
     if (confirm('You Loserrrr, wanna play again?')) {
 
         // Save it!
        
         initGame()
+
+        reset()
     }
 
 
@@ -268,7 +336,9 @@ function cellMarked(elCell, i, j) {
 
 function checkGameOver() {
 
+
     let win = true;
+
 
     for (var i = 0; i < gBoard.length; i++) {
         for (var j = 0; j < gBoard.length; j++) {
@@ -284,11 +354,14 @@ function checkGameOver() {
 
     if (win) {
 
-        
+        pause();
 
         if (confirm('You wonnnnnnnn, wanna play again?')) {
            
             initGame()
+
+            reset()
+
         }
 
     }
