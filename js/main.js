@@ -6,6 +6,12 @@ const FLAG = '🚩';
 
 const EMPTY = ' '
 
+var glives = 0;
+
+const life = '❤️';
+
+
+
 let gBoard = {};
 
 
@@ -23,14 +29,17 @@ function createMat(ROWS, COLS) {
     return mat
 }
 
-let minesCount = 2;
-let boardSize=4;
 
-initGame()
+let minesCount = 2;
+let boardSize = 4;
+
+//initGame()
 
 function initGame() {
 
-    let seconds = 0;
+    glives = 3;
+
+    renderLives();
 
 
     gBoard = buildBoard();
@@ -42,18 +51,28 @@ function initGame() {
 
 }
 
+
+function renderLives() {
+
+    const elLives = document.getElementById('lives')
+    elLives.innerText = '';
+    for (let i = 0; i < glives; i++)
+        elLives.innerText += life;
+}
+
+
 function setSize(size) {
 
     console.log(size);
-    boardSize=size
+    boardSize = size
     initGame()
 }
 
 
 function setMins(mins) {
-    
+
     console.log(mins);
-    minesCount=mins
+    minesCount = mins
     initGame()
 }
 
@@ -74,50 +93,49 @@ let cron;
 function start() {
     pause();
     cron = setInterval(() => { timer(); }, 10);
-  }
-  
-  function pause() {
+}
+
+function pause() {
     clearInterval(cron);
-  }
-  
-  function reset() {
+}
+
+function reset() {
 
     hour = 0;
     minute = 0;
     second = 0;
     millisecond = 0;
+
     document.getElementById('hour').innerText = '00';
     document.getElementById('minute').innerText = '00';
     document.getElementById('second').innerText = '00';
     document.getElementById('millisecond').innerText = '000';
-  }
+}
 
 
-  function timer() {
+function timer() {
 
     if ((millisecond += 10) == 1000) {
-      millisecond = 0;
-      second++;
+        millisecond = 0;
+        second++;
     }
     if (second == 60) {
-      second = 0;
-      minute++;
+        second = 0;
+        minute++;
     }
     if (minute == 60) {
-      minute = 0;
-      hour++;
+        minute = 0;
+        hour++;
     }
     document.getElementById('hour').innerText = returnData(hour);
     document.getElementById('minute').innerText = returnData(minute);
     document.getElementById('second').innerText = returnData(second);
     document.getElementById('millisecond').innerText = returnData(millisecond);
-  }
-  
-  function returnData(input) {
+}
+
+function returnData(input) {
     return input > 10 ? input : `0${input}`
-  }
-
-
+}
 
 
 
@@ -164,7 +182,7 @@ function renderBoard(board) {
 
             // var cellClass = getClassName({ i: i, j: j })
 
-            strHTML += '<td class="cell" oncontextmenu="cellMarked(this,' + i + ',' + j + ')" onClick="cellClicked(this,' + i + ',' + j + ');" >';
+            strHTML += '<td class="cell" id="cell-' + i + '-' + j + '" oncontextmenu="cellMarked(this, ' + i + ', ' + j + ')" onClick="cellClicked(this, ' + i + ', ' + j + '); " >';
 
 
             // if (currCell.isMine) {
@@ -184,6 +202,7 @@ function renderBoard(board) {
     }
 
 
+
     var elBoard = document.querySelector('.board');
     elBoard.innerHTML = strHTML;
 }
@@ -195,32 +214,6 @@ function getClassName(location) {
     var cellClass = 'cell-' + location.i + '-' + location.j;
     return cellClass;
 }
-
-
-/* function cellClicked(elCell, i, j) {
-
-    
-
-    var cell = gBoard[i][j]
-    
-    if (cell.isShown) return
-    
-    if (cell.mines) gameOver()
-
-    var neighbors = countAllNeighbors(elCell, i, j)
-
-    if (gBoard[i][j].isMine) {
-
-        cell.innerText = MINE;
-
-    } else {
-
-        cell.innerText = neighbors;
-    }
-
-} */
-
-
 
 
 
@@ -244,50 +237,89 @@ function setMinesNegsCount(board) {
 
 function countAllNeighbors(board, i, j) {
 
-    var rowLimit = board.length-1;
-    var columnLimit = board[0].length-1;
-    let count=0
-    for(var x = Math.max(0, i-1); x <= Math.min(i+1, rowLimit); x++) {
-      for(var y = Math.max(0, j-1); y <= Math.min(j+1, columnLimit); y++) {
-        if(x !== i || y !== j) {
-          if(board[x][y].isMine) 
-            count++;
+    var rowLimit = board.length - 1;
+    var columnLimit = board[0].length - 1;
+    let count = 0
+
+    for (var x = Math.max(0, i - 1); x <= Math.min(i + 1, rowLimit); x++) {
+        for (var y = Math.max(0, j - 1); y <= Math.min(j + 1, columnLimit); y++) {
+            if (x !== i || y !== j) {
+                if (board[x][y].isMine)
+                    count++;
+            }
         }
-      }
     }
     return count
-  }
+}
+
+function showNeighbours(board, i, j) {
+
+    var rowLimit = board.length - 1;
+    var columnLimit = board[0].length - 1;
 
 
+    for (var x = Math.max(0, i - 1); x <= Math.min(i + 1, rowLimit); x++) {
+        for (var y = Math.max(0, j - 1); y <= Math.min(j + 1, columnLimit); y++) {
+
+            if (!board[x][y].isMine)
+                if (board[x][y].minesAroundCount === 0) {
+                    const elCell = document.getElementById("cell-" + x + '-' + y)
+                    // elCell.innerText = board[x][y].minesAroundCount
+                    elCell.classList.add("cell-opened")
+                    board[x][y].isShown = true;
+
+
+                }
+                else{
+                    const elCell = document.getElementById("cell-" + x + '-' + y)
+                    elCell.innerText = board[x][y].minesAroundCount
+                    elCell.classList.add("cell-opened")
+                    board[x][y].isShown = true;
+                }
+
+        }
+    }
+}
 
 function cellClicked(elCell, i, j) {
 
-start();
-    
+    start();
+
     var currCell = gBoard[i][j];
 
-    
-    if (currCell.isShown)
-        return;
-        
+    if (currCell.isShown) return;
+
     if (currCell.isMine) {
 
         elCell.innerText = mines;
 
-        setTimeout(gameOver, 300)
+        glives--;
+
+        renderLives()
+
+        if (glives === 0) {
+            setTimeout(gameOver, 300)
+        }
 
         return;
     }
-    
-    elCell.innerText = currCell.minesAroundCount
+
+
+
+    if (currCell.minesAroundCount !== 0)
+        elCell.innerText = currCell.minesAroundCount
+    else
+        elCell.classList.add("cell-opened")
     gBoard[i][j].isShown = true;
+    showNeighbours(gBoard, i, j);
     // if (currCell.minesAroundCount) {
 
     // }
 
     checkGameOver()
-   
-    
+
+
+
 }
 
 
@@ -296,13 +328,18 @@ function gameOver() {
 
     pause();
 
+
+
     if (confirm('You Loserrrr, wanna play again?')) {
 
         // Save it!
-       
+
         initGame()
 
         reset()
+
+
+
     }
 
 
@@ -357,7 +394,7 @@ function checkGameOver() {
         pause();
 
         if (confirm('You wonnnnnnnn, wanna play again?')) {
-           
+
             initGame()
 
             reset()
@@ -368,3 +405,6 @@ function checkGameOver() {
 
 
 }
+
+
+

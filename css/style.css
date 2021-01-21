@@ -3,7 +3,6 @@
     font-size: 20px;
     text-align: center;
     padding: 20px 0;
-    background-image: url("1.jpg");
     background-color: rgb(161, 156, 139);
     
 }
@@ -37,6 +36,9 @@ h2 {
     border: 3px solid rgb(107, 98, 98);
     box-shadow:rgb(19, 17, 14);
    
+}
+.cell-opened {
+    background-color: dimgray;
 }
 
 
