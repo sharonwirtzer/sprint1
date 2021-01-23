@@ -275,14 +275,16 @@ function cellClicked(elCell, i, j) {
 function gameOver() {
 
     pause();
+    pause();
+    initGame();
 
     document.getElementById('happy').innerText = '🤯';
 
     if (window.setTimeout(confirm, 500, 'You Loserrrr, wanna play again?') === true) {
 
-        initGame()
+        initGame();
 
-        reset()
+        reset();
 
     }
 
@@ -327,16 +329,19 @@ function checkGameOver() {
 
     if (win) {
 
+        reset();
         pause();
+        initGame();
 
         document.getElementById('happy').innerText = '😎';
 
         if (window.setTimeout(confirm, 500, 'You wonnnnnnnn, wanna play again?') === true) {
 
-            initGame()
+            pause();
+            initGame();
 
-            reset()
         }
+
     }
 }
 
