@@ -4,18 +4,11 @@ const mines = '💣';
 
 const FLAG = '🚩';
 
-const EMPTY = ' '
-
 var glives = 0;
 
 const life = '❤️';
 
-
-
 let gBoard = {};
-
-
-
 
 function createMat(ROWS, COLS) {
     var mat = []
@@ -29,7 +22,6 @@ function createMat(ROWS, COLS) {
     return mat
 }
 
-
 let minesCount = 2;
 let boardSize = 4;
 
@@ -41,16 +33,15 @@ function initGame() {
 
     renderLives();
 
-
     gBoard = buildBoard();
 
     setMinesNegsCount(gBoard)
 
     renderBoard(gBoard);
 
+    document.getElementById('happy').innerText = '😀';
 
 }
-
 
 function renderLives() {
 
@@ -60,14 +51,12 @@ function renderLives() {
         elLives.innerText += life;
 }
 
-
 function setSize(size) {
 
     console.log(size);
     boardSize = size
     initGame()
 }
-
 
 function setMins(mins) {
 
@@ -76,19 +65,12 @@ function setMins(mins) {
     initGame()
 }
 
-
-
-
 let hour = 0;
 let minute = 0;
 let second = 0;
 let millisecond = 0;
 let input;
 let cron;
-
-
-
-
 
 function start() {
     pause();
@@ -111,7 +93,6 @@ function reset() {
     document.getElementById('second').innerText = '00';
     document.getElementById('millisecond').innerText = '000';
 }
-
 
 function timer() {
 
@@ -137,13 +118,8 @@ function returnData(input) {
     return input > 10 ? input : `0${input}`
 }
 
-
-
-
-
 function buildBoard() {
 
-    //const minesCount = 4
     const size = boardSize
     var board = createMat(size, size)
 
@@ -161,7 +137,6 @@ function buildBoard() {
         }
     }
 
-
     for (let i = 0; i < minesCount; i++) {
 
         const x = Math.floor(Math.random() * size);
@@ -175,47 +150,28 @@ function buildBoard() {
 function renderBoard(board) {
 
     var strHTML = '';
+
     for (var i = 0; i < board.length; i++) {
         strHTML += '<tr>';
         for (var j = 0; j < board[0].length; j++) {
             var currCell = board[i][j];
 
-            // var cellClass = getClassName({ i: i, j: j })
-
             strHTML += '<td class="cell" id="cell-' + i + '-' + j + '" oncontextmenu="cellMarked(this, ' + i + ', ' + j + ')" onClick="cellClicked(this, ' + i + ', ' + j + '); " >';
 
-
-            // if (currCell.isMine) {
-            // strHTML += mines;
-            // }
-
-            //    else{
-            //  strHTML += '' ;
-            // } 
-
-
             strHTML += "</td>"
-
-
         }
         strHTML += "</tr>"
     }
 
-
-
     var elBoard = document.querySelector('.board');
     elBoard.innerHTML = strHTML;
 }
-
-
 
 function getClassName(location) {
 
     var cellClass = 'cell-' + location.i + '-' + location.j;
     return cellClass;
 }
-
-
 
 function setMinesNegsCount(board) {
 
@@ -232,8 +188,6 @@ function setMinesNegsCount(board) {
     }
     return board;
 }
-
-
 
 function countAllNeighbors(board, i, j) {
 
@@ -270,7 +224,7 @@ function showNeighbours(board, i, j) {
 
 
                 }
-                else{
+                else {
                     const elCell = document.getElementById("cell-" + x + '-' + y)
                     elCell.innerText = board[x][y].minesAroundCount
                     elCell.classList.add("cell-opened")
@@ -293,6 +247,9 @@ function cellClicked(elCell, i, j) {
 
         elCell.innerText = mines;
 
+        var audio = new Audio('pop.wav');
+        audio.play();
+
         glives--;
 
         renderLives()
@@ -304,53 +261,36 @@ function cellClicked(elCell, i, j) {
         return;
     }
 
-
-
     if (currCell.minesAroundCount !== 0)
         elCell.innerText = currCell.minesAroundCount
     else
         elCell.classList.add("cell-opened")
     gBoard[i][j].isShown = true;
     showNeighbours(gBoard, i, j);
-    // if (currCell.minesAroundCount) {
-
-    // }
 
     checkGameOver()
 
-
-
 }
-
-
 
 function gameOver() {
 
     pause();
 
+    document.getElementById('happy').innerText = '🤯';
 
-
-    if (confirm('You Loserrrr, wanna play again?')) {
-
-        // Save it!
+    if (window.setTimeout(confirm, 500, 'You Loserrrr, wanna play again?') === true) {
 
         initGame()
 
         reset()
 
-
-
     }
 
-
 }
-
 
 function cellMarked(elCell, i, j) {
 
     window.event.preventDefault()
-
-
 
     var currCell = gBoard[i][j];
 
@@ -359,7 +299,6 @@ function cellMarked(elCell, i, j) {
         gBoard[i][j].isMarked = true;
 
         setTimeout(checkGameOver, 300)
-        //checkGameOver()
     }
 
     else {
@@ -370,12 +309,9 @@ function cellMarked(elCell, i, j) {
 
 }
 
-
 function checkGameOver() {
 
-
     let win = true;
-
 
     for (var i = 0; i < gBoard.length; i++) {
         for (var j = 0; j < gBoard.length; j++) {
@@ -393,17 +329,15 @@ function checkGameOver() {
 
         pause();
 
-        if (confirm('You wonnnnnnnn, wanna play again?')) {
+        document.getElementById('happy').innerText = '😎';
+
+        if (window.setTimeout(confirm, 500, 'You wonnnnnnnn, wanna play again?') === true) {
 
             initGame()
 
             reset()
-
         }
-
     }
-
-
 }
 
 
