@@ -1,0 +1,73 @@
+  body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 20px;
+      text-align: center;
+      padding: 20px 0;
+      background-color: rgb(161, 156, 139);
+  }
+
+  h1 {
+      color: rgb(105, 62, 32);
+      background-color: rgb(114, 110, 103);
+      border-top: 2px solid black;
+      padding: 12px;
+      margin: 15px;
+      font-family: Arial, Helvetica, sans-serif;
+  }
+
+  h2 {
+      color: rgb(110, 107, 97);
+      border-top: 2px solid rgb(56, 51, 51);
+      padding: 12px;
+      margin: 15px;
+      font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .cell {
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      background-color: rgb(117, 131, 121);
+      cursor: pointer;
+      border: 3px solid rgb(107, 98, 98);
+      box-shadow: rgb(19, 17, 14);
+  }
+
+  .cell-opened {
+      background-color: dimgray;
+  }
+
+  .board-container {
+      display: flex;
+      justify-content: center;
+      background-color: rgb(66, 62, 61);
+      padding: 6px;
+      padding-left: 300;
+      border: 40px solid rgb(48, 46, 46);
+  }
+
+  button {
+      background-color: rgb(82, 121, 98);
+      font-size: 30px;
+      padding: 5px;
+      margin-top: px;
+      margin-right: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+  }
+
+  .footer {
+      background-color: gray;
+      border-bottom: 2px solid rgb(26, 25, 25);
+      padding: 12px;
+      font-family: Arial, Helvetica, sans-serif;
+      margin-top: 120px;
+  }
+
+  button:hover {
+      background-color: rgb(115, 122, 119);
+  }
+
+  .cell:hover {
+      background-color: rgb(150, 119, 97);
+  }
