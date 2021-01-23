@@ -274,7 +274,7 @@ function cellClicked(elCell, i, j) {
 
 function gameOver() {
 
-    pause();
+    reset();
     pause();
     initGame();
 
